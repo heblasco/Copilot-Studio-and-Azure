@@ -32,6 +32,16 @@ Copilot Studio empowered by Azure is recommended in scenarios when:
 - You have access to thousands of high-quality examples and verified data.
 
 # Learning Path
+**Lab 0: Prerequisites***
+- [Lab 0.0](labs/0.0-create-an-agent.md): Create an agent for testing and monitoring.
+
+**Lab1: Copilot Studio AI Native features***
+- [Lab 1.0](labs/1.0-create-topics.md): Create Topics.
+- [Lab 1.1](labs/1.1-authentification.md): Authentication.
+- [Lab 1.2](labs/1.2-tools.md): Tools.
+- [Lab 1.3](labs/1.3-MCP.md): Integrate Model Context Protocol (MCP) in Copilot Studio.
+- [Lab 1.4](labs/1.4-ai-search): Use Azure AI Search in Copilot Studio.
+- [Lab 1.5](labs/1.5-custom-models.md): Use custom models in Copilot Studio.
 
 # Usage scenarios
 
