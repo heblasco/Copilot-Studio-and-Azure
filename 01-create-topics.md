@@ -1,4 +1,4 @@
-# Labs 1: Create Topics
+# Lab 1: Create Topics
 
 ## Objectives
 

@@ -1,4 +1,4 @@
-# Labs 0: Create an agent for testing and monitoring
+# Lab 0: Create an agent for testing and monitoring
 
 ## Objectives
 

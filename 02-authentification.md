@@ -1,4 +1,4 @@
-# Labs 2: Authentication
+# Lab 2: Authentication
 
 ## Objectives
 
