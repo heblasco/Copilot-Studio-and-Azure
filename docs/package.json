@@ -1,9 +1,9 @@
 {
-  "name": "aihub",
+  "name": "Copilot-Studio-and-Azure",
   "version": "0.7.1",
   "description": "Copilot Studio and Azure labs documentation.",
   "repository": "github:azure/Copilot-Studio-and-Azure",
-  "homepage": "https://azure.github.io/Copilot-Studio-and-Azure/",
+  "homepage": "https://didactic-doodle-yvr845e.pages.github.io/Copilot-Studio-and-Azure/",
   "author": "Docsy Authors",
   "license": "Apache-2.0",
   "bugs": "https://github.com/azure/Copilot-Studio-and-Azure/issues",
