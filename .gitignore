@@ -419,7 +419,9 @@ FodyWeavers.xsd
 
 # Terraform files
 *.tfstate
+*.tfstate.*
 *.tfstate.backup
 .terraform/
 .terraform.lock.hcl
 crash.log
+*.tfvars
