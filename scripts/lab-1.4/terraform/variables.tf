@@ -14,6 +14,14 @@ variable "location_azopenai" {
   default = "swedencentral"
 }
 
+variable "storage_account_name" {
+  default = "aisearchlabst"
+}
+
+variable "azopenai_name" {
+  default = "aisearch-lab-openai"
+}
+
 variable "ai_search_name" {
   default = "aisearch-lab-search"
 }

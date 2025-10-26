@@ -63,7 +63,7 @@ resource "azurerm_cognitive_deployment" "embeddings" {
   model {
     format  = "OpenAI"
     name    = "text-embedding-ada-002"
-    version = "1"
+    version = "2"
   }
   sku {
     name     = "GlobalStandard"

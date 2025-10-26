@@ -6,7 +6,8 @@ resource "azurerm_search_service" "search" {
   semantic_search_sku = "free"
   allowed_ips          = null
 
-  local_authentication_enabled = false
+  local_authentication_enabled = true
+  authentication_failure_mode = "http403"
 }
 
 resource "azurerm_role_assignment" "search_reader" {

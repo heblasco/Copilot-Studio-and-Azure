@@ -17,6 +17,10 @@ locals {
   name_sufix              = var.use_random_suffix ? "-${local.sufix}" : ""
   resource_group_name     = "${var.resource_group_name}${local.name_sufix}"
 
+  storage_account_name    = "${var.storage_account_name}${local.sufix}"
+
+  azopenai_name           = "${var.azopenai_name}${local.name_sufix}"
+  
   ai_services_name        = "${var.ai_services_name}${local.name_sufix}"
   ai_foundry_name         = "${var.ai_foundry_name}${local.name_sufix}"
   ai_foundry_project_name = "${var.ai_foundry_project_name}${local.name_sufix}"
@@ -52,20 +56,40 @@ resource "azurerm_role_assignment" "id_reader" {
   principal_id         = module.mi.principal_id
 }
 
-module "ai_foundry" {
-  source                      = "./modules/ai-foundry"
+
+module "st" {
+  source                      = "./modules/st"
   location                    = azurerm_resource_group.rg.location
   resource_group_name         = azurerm_resource_group.rg.name
-  resource_group_id           = azurerm_resource_group.rg.id
-  ai_foundry_name             = local.ai_foundry_name
-  ai_services_name            = local.ai_services_name
-  ai_foundry_project_name     = local.ai_foundry_project_name
-  kv_name                     = local.ai_foundry_kv_name
-  st_name                     = local.ai_foundry_st_name
-  subscription_id             = data.azurerm_subscription.current.subscription_id
-  tenant_id                   = data.azurerm_subscription.current.tenant_id
-  current_principal_object_id = data.azurerm_client_config.current.object_id
-  aihub_principal_id          = module.mi.principal_id
+  storage_account_name        = local.storage_account_name
+  principal_id                = module.mi.principal_id
+  vnet_id                     = module.vnet.virtual_network_id
+}
+
+# module "ai_foundry" {
+#   source                      = "./modules/ai-foundry"
+#   location                    = azurerm_resource_group.rg.location
+#   resource_group_name         = azurerm_resource_group.rg.name
+#   resource_group_id           = azurerm_resource_group.rg.id
+#   ai_foundry_name             = local.ai_foundry_name
+#   ai_services_name            = local.ai_services_name
+#   ai_foundry_project_name     = local.ai_foundry_project_name
+#   kv_name                     = local.ai_foundry_kv_name
+#   st_name                     = local.ai_foundry_st_name
+#   subscription_id             = data.azurerm_subscription.current.subscription_id
+#   tenant_id                   = data.azurerm_subscription.current.tenant_id
+#   current_principal_object_id = data.azurerm_client_config.current.object_id
+#   aihub_principal_id          = module.mi.principal_id
+# }
+
+module "openai" {
+  source                      = "./modules/openai"
+  location                    = var.location_azopenai
+  resource_group_name         = azurerm_resource_group.rg.name
+  azopenai_name               = local.azopenai_name
+  principal_id                = module.mi.principal_id
+  vnet_id                     = module.vnet.virtual_network_id
+  vnet_location               = azurerm_resource_group.rg.location
 }
 
 module "search" {
