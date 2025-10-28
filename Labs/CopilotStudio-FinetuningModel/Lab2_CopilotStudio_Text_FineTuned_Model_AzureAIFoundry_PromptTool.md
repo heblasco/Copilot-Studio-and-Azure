@@ -41,13 +41,9 @@ In this lab you will **fine‑tune a text model** in **Azure AI Foundry**, deplo
 
 ---
 ## Part 1 — Data preparation & baseline evaluation
-For illustration purposes, the training and validation datasets have been made ready for you. Each dataset contains only 10 samples, and each sample consists of a single-turn Q&A pair. [sample dataset](https://github.com/Azure/LLM-Fine-Tuning-Azure/tree/main/labs/fine_tuning_notebooks/gpt_fine_tuning)
-### 1.1 Curate datasets
-- Prepare **train**, **validation**, and **test** splits.
-- Format in **JSONL** compatible with the target base model (prompt‑completion or chat turns).
-- Remove or mask **PII**; ensure licensing and consent for all data.
 
-
+### Use Template Structure
+Azure AI Foundry fine-tuning primarily uses JSONL (JSON Lines) format, where each line contains a separate JSON object representing one training example.
 **Example `train.jsonl` (chat format):**
 ```jsonl
 {"messages": 
@@ -61,12 +57,96 @@ For illustration purposes, the training and validation datasets have been made r
      {"role": "assistant", "content": "The Pacific Ocean. It's not like it's a small pond or anything."}]}
 ```
 
-### 1.2 Establish a baseline
-- In Azure AI Foundry, evaluate your **candidate base model** with a representative **prompt set** (held‑out test).  
-- Use **Azure AI Evaluation SDK** and choose metrics relevant to your domain (accuracy, coherence, safety signals, groundedness where applicable).  
-- Document baseline results to compare post fine‑tune.
+### 📊 Data Quality Standards
 
----
+### ✅ What Makes Good Training Data
+
+**High-Quality Examples:**
+- **Comprehensive responses** with detailed explanations
+- **Consistent tone and style** throughout each domain
+- **Real-world scenarios** that users actually encounter
+- **Step-by-step guidance** when appropriate
+- **Professional but friendly** communication style
+
+**Proper Format:**
+- Valid JSON structure on each line
+- Required `messages` array with `role` and `content`
+- Appropriate token length (100-2000 tokens per example)
+- UTF-8 encoding
+
+### ❌ What to Avoid
+
+- Generic or template-like responses
+- Inconsistent formatting or style
+- Overly short or minimal answers
+- Technical errors or inaccuracies
+- Duplicate or near-duplicate examples
+
+### 🔧 Using the Validation Script
+
+The included validation script helps ensure your data meets Azure AI Foundry requirements:
+
+```bash
+# Basic validation
+python validate_training_data.py your-file.jsonl
+
+# Example output:
+============================================================
+VALIDATION REPORT: customer-support-training-data.jsonl
+============================================================
+Status: ✅ VALID
+Total lines: 10
+Valid examples: 10
+
+Token Statistics:
+  Min tokens per example: 156
+  Max tokens per example: 445
+  Average tokens per example: 289.2
+  Total tokens: 2892
+
+📋 RECOMMENDATIONS:
+  ✅ File format is valid and ready for fine-tuning!
+```
+
+### 🛠 Customization Guidelines
+
+### Adapting for Your Use Case
+
+1. **Modify the System Prompt:**
+   ```json
+   {"role": "system", "content": "You are a specialist in [YOUR DOMAIN]. [SPECIFIC INSTRUCTIONS]"}
+   ```
+
+2. **Add Domain-Specific Examples:**
+   - Use your actual user questions
+   - Include your preferred response style
+   - Add industry-specific terminology
+
+3. **Maintain Consistency:**
+   - Keep the same tone throughout
+   - Use consistent formatting
+   - Follow the same response structure
+
+### Scaling Your Dataset
+
+**Starting Small (10-50 examples):**
+- Test your approach
+- Validate model behavior
+- Iterate on prompt engineering
+
+**Production Scale (100-1000+ examples):**
+- Cover edge cases and variations
+- Include error scenarios
+- Add diverse conversation patterns
+
+### 📈 Fine-Tuning Best Practices
+
+#### Pre-Training Checklist
+- [ ] Validate data format with the included script
+- [ ] Review examples for accuracy and consistency
+- [ ] Ensure diverse coverage of use cases
+- [ ] Test with a small batch first
+- [ ] Set aside validation data (~20% of total)
 
 ## Part 2 — Fine‑tuning in Azure AI Foundry
 In this section, we’ll walk through a step-by-step guide on how to fine-tune the GPT-4.1-mini model using the AI Foundry Dashboard.
@@ -178,77 +258,50 @@ You can also review the various **Metrics** of your fine-tuned model.
 - Or integrate it via the Completion API.
 
 ---
-## Part 3 — Integrate the endpoint via an HTTP Action (Tool)
 
-### 3.1 Create the Action
-**Option A — Custom Connector**  
-- Name: `FTTextModelConnector`.  
-- Security: API key or AAD.  
-- Operation `inferText` (POST to `{FOUNDry_ENDPOINT}/inference`).  
-- Request (example):
-  ```json
-  {
-    "input": {
-      "messages": [
-        {"role":"system","content":"<stable domain instructions>"},
-        {"role":"user","content":"<user_input>"}
-      ],
-      "temperature": 0.3,
-      "max_tokens": 512
-    }
-  }
-  ```
-- Response (example):
-  ```json
-  {
-    "result": {
-      "completion": "string",
-      "meta": {"latency_ms": 0}
-    }
-  }
-  ```
-- **Test** and **Publish**.
-
-**Option B — Power Automate flow (HTTP)**  
-- Configure *HTTP* POST with the same URL/body.  
-- Return `completion` as the flow’s output.
-
-### 3.2 Add & map the Tool in the agent
-- **Add Tool** → select the connector operation (or flow).  
-- Inputs: `user_input`, `temperature` (optional), `context` (optional).  
-- Outputs: `completion`, `meta`.
-
----
-
-## Part 4 — Create a Prompt Tool (Prompt‑mode Tool) in Copilot Studio
+## Part 3 — Create a Prompt Tool (Prompt‑mode Tool) in Copilot Studio
 
 > Purpose: The **Prompt Tool** uses the models available inside Copilot Studio’s Prompt builder (e.g., **GPT‑4.1 mini** by default). It’s ideal for templating instructions, **validating/normalizing** outputs from your fine‑tuned model, or adding safety checks—without calling your external endpoint.
 
-### 4.1 Define the Prompt Tool
-1. In the agent, **Add Tool → Prompt**.  
-2. **Name**: `FT_PostProcessor`.  
-3. **System Prompt** (example):
+### 3.1 Define the Prompt Tool
+1. In the agent, **Tools → Add Tool → New Tool → Prompt**.  
+
+  <ol><img src="../images/add-prompt-tool-copilot-studio.png" alt="Screenshot of adding a prompt tool to the copilot studio agent" width="600"/></ol> 
+2. From the top right **Model** section, chose  Azure AI Foundry models
+
+   <ol><img src="../images/aifoundry-import-copilot-studio.png" alt="Screenshot of importing fine tuned model from Foundry" width="600"/></ol>
+3. 
+3. Fill all the required information, using the deployment information of the fine-tuned model, then  **Connect**
+
+   <ol><img src="../images/ft-model-details-copilot-studio.png" alt="Screenshot of importing fine tuned model from Foundry" width="600"/></ol>
+4. When you see this confirmation box, then the connection is succeded.
+
+   <ol><img src="../images/ft-model-connected-copilot-studio.png" alt="Screenshot of importing fine tuned model from Foundry" width="600"/></ol>
+5. Then, configure the instruction for the prompt tool.  
+   
+   **System Prompt** (example):
    ```
    You are a compliance verifier. Review the model's response for: 
    (1) professional tone, (2) no PII leakage, (3) completeness vs. the user's request. 
    If issues exist, return a concise revised response.
    ```
-4. **Inputs**:
-   - `model_response` (string, required)  
-   - `user_request` (string, required)  
-   - `policy_notes` (string, optional)
-5. **Output schema** (template):
-   - `valid` (boolean)  
-   - `observations` (string)  
-   - `final_response` (string)
-6. **Model selection**: Keep default or choose a higher tier if available in your tenant’s Prompt builder.
-7. **Test** with a representative `model_response`.
+   
+   <ol><img src="../images/agents-ft-pompt-copilot-studio.png" alt="Screenshot of importing fine tuned model from Foundry" width="600"/></ol> 
+6. Next step, rename the prompt tool, previously created. To do that, click on the created tool and edit the **Name** : `FT_PostProcessor`.
 
-### 4.2 Orchestrate both Tools in Generative mode
+   <ol><img src="../images/rename-prompt-tool-copilot-studio.png" alt="Screenshot of importing fine tuned model from Foundry" width="600"/></ol>
+7. Once configured, your agent "Tool" section, should look as below:
+
+<ol><img src="../images/tool-confirmation-copilot-studio.png" alt="Screenshot of importing fine tuned model from Foundry" width="600"/></ol>
+
+### 3.2 Orchestrate both Tools in Generative mode
 - In **Instructions**, tell the agent to:
   - First call **`inferText`** (the fine‑tuned endpoint) with the user’s task.  
   - Then call **`FT_PostProcessor`** with `{model_response: completion, user_request: <original request>}`.  
   - Return `final_response` to the user; if `valid = false`, include `observations`.
+
+
+<ol><img src="../images/edit-agent-instruction-copilot-studio.png" alt="Screenshot of importing fine tuned model from Foundry" width="600"/></ol>
 
 **Example instruction snippet**:
 ```
@@ -260,7 +313,7 @@ When a user asks a domain question:
 
 ---
 
-## Part 5 — Classic topic variant (deterministic path)
+## Part 4 — Classic topic variant (deterministic path)
 - Create **Topic**: `Domain Answer (Classic)`.  
 - **Trigger phrases**: 6–10 representative intents (short, semantically diverse).  
 - **Nodes**:
@@ -272,7 +325,7 @@ When a user asks a domain question:
 
 ---
 
-## Part 6 — A/B testing & evaluation
+## Part 5 — A/B testing & evaluation
 - Prepare a fixed **prompt set** from real scenarios (sanitized).  
 - Compare **baseline vs fine‑tuned** using Azure AI Evaluation (quality, safety, groundedness where applicable).  
 - Track **latency** and **token/throughput** signals (if available from your endpoint).  
