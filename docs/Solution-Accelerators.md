@@ -5,7 +5,7 @@ Copilot Studio is a native tool that can be extended with various Azure AI capab
 Copilot Studio provides native capabilities for generating answers and connecting basic queries to Azure AI Search. However, in many scenarios, this isn't sufficient. To deliver more accurate and context-rich responses, we need to implement Retrieval-Augmented Generation (RAG). This approach is especially valuable when customers need to index a large volume of documents and require high accuracy in the generative responses. By leveraging the [GPT RAG accelerator](https://github.com/Azure/gpt-rag?tab=readme-ov-file) alongside Copilot Studio, we can significantly accelerate the adoption of this advanced technology.
 The [GPT-RAG](https://github.com/Azure/gpt-rag?tab=readme-ov-file) acceleration can significally helps in the data Ingestion service automates the processing of diverse document types—such as PDFs, images, spreadsheets, transcripts, and SharePoint files—preparing them for indexing in Azure AI Search. It uses intelligent chunking strategies tailored to each format, generates text and image embeddings, and enables rich, multimodal retrieval experies for agent-based RAG applications.
 
-We yse this accelerator speacially for blob storage and Sharepoint.
+We use this accelerator speacially for blob storage and Sharepoint.
 
 ## Document procesing 
 
