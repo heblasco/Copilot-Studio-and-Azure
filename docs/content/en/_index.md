@@ -5,7 +5,7 @@ title: Copilot Studio and Azure Labs
 {{< blocks/cover title="Copilot Studio and Azure Labs!" image_anchor="top" height="full" >}}
 <!-- <div class=""><img src="/Copilot-Studio-and-Azure/img/Copilot-Studio-and-Azure-logo.png" style="height: 200px; margin-bottom: 20px;" /></div> -->
 <div class="">
-<a class="btn btn-lg btn-primary me-3 mb-4" href="/Copilot-Studio-and-Azure/docs/">
+<a class="btn btn-lg btn-primary me-3 mb-4" href="/docs/">
   Learn More <i class="fas fa-arrow-alt-circle-right ms-2"></i>
 </a>
 <a class="btn btn-lg btn-secondary me-3 mb-4" href="https://github.com/azure/Copilot-Studio-and-Azure">
@@ -29,7 +29,7 @@ This delivery guide will help you test Copilot Studio and Azure Labs.
 
 {{% blocks/section color="dark" type="row" %}}
 
-{{% blocks/feature icon="fa-solid fa-file-lines" title="Read the Docs!" url="https://didactic-doodle-yvr845e.pages.github.io/Copilot-Studio-and-Azure/docs/" %}}
+{{% blocks/feature icon="fa-solid fa-file-lines" title="Read the Docs!" url="https://didactic-doodle-yvr845e.pages.github.io/docs/" %}}
 Read the delivery guide and learn how to deploy the solution.
 {{% /blocks/feature %}}
 
