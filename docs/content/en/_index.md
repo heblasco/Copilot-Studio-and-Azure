@@ -5,7 +5,7 @@ title: Copilot Studio and Azure Labs
 {{< blocks/cover title="Copilot Studio and Azure Labs!" image_anchor="top" height="full" >}}
 <!-- <div class=""><img src="/Copilot-Studio-and-Azure/img/Copilot-Studio-and-Azure-logo.png" style="height: 200px; margin-bottom: 20px;" /></div> -->
 <div class="">
-<a class="btn btn-lg btn-primary me-3 mb-4" href="/docs/">
+<a class="btn btn-lg btn-primary me-3 mb-4" href="/Copilot-Studio-and-Azure/docs/">
   Learn More <i class="fas fa-arrow-alt-circle-right ms-2"></i>
 </a>
 <a class="btn btn-lg btn-secondary me-3 mb-4" href="https://github.com/azure/Copilot-Studio-and-Azure">
